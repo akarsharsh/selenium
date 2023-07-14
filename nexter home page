@@ -1,0 +1,70 @@
+#home page of nexter 
+
+
+import time
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+
+driver.get("https://nexter.fi/")
+
+driver.find_element(By.CSS_SELECTOR,"img[alt='video icon']").click()
+time.sleep(1)
+
+if driver.find_element(By.CSS_SELECTOR,"span[class='text-base text-[#F6F6F499]']").is_displayed():
+    print("displayed")
+else:
+    print("not displayed")
+time.sleep(1)
+driver.refresh()
+time.sleep(1)
+parent_window = driver.current_window_handle
+
+time.sleep(1)
+
+driver.find_element(By.CSS_SELECTOR,"body > div:nth-child(1) > div:nth-child(1) > section:nth-child(3) > div:nth-child(1) > a:nth-child(3) > button:nth-child(1)").click()
+time.sleep(1)
+
+windows  = driver.window_handles
+for w in windows:
+    driver.switch_to.window(w)
+    if driver.title.__eq__("Nexter Finance"):
+        driver.close()
+        time.sleep(1)
+        break
+
+driver.switch_to.window(parent_window)
+time.sleep(1)
+
+parent_window1 = driver.current_window_handle
+
+driver.find_element(By.CSS_SELECTOR,"a[class='px-6 py-3 text-sm leading-[22px] font-medium transition-all divide-purple-500 rounded-md text-nexter-white hover:bg-gradient-primary']").click()
+time.sleep(1)
+windows2  = driver.window_handles
+for w in windows2:
+    driver.switch_to.window(w)
+    if driver.title.__eq__("Welcome! - Nexter"):
+        driver.close()
+        time.sleep(1)
+        break
+
+driver.switch_to.window(parent_window)
+time.sleep(1)
+
+audit = driver.find_element(By.CSS_SELECTOR,"body > div:nth-child(1) > div:nth-child(1) > footer:nth-child(12) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > a:nth-child(1)")
+
+driver.execute_script("arguments[0].scrollIntoView()", audit)
+
+time.sleep(1)
+driver.find_element(By.ID,"email").send_keys("akarsh@oddz.fi")
+time.sleep(1)
+driver.find_element(By.CSS_SELECTOR,"button[type='submit']").click()
+time.sleep(3)
+if driver.find_element(By.CSS_SELECTOR,"p[class='max-w-xs text-center pt-10 text-green sm:max-w-sm md:max-w-none text-xs']").is_displayed():
+    print('received a letter')
+else:
+    print('letter is not received')
+time.sleep(1)
+driver.close()
